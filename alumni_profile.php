@@ -152,8 +152,9 @@ if ($con->connect_error) {
                             </ul>
                         </li>
 
+
                         <li class="">
-                            <a href="admin_message.php" class="">
+                            <a href="alumni_changePass.php" class="">
                                 <svg class="svg-icon" id="p-dash7" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8e3041" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                     <polyline points="14 2 14 8 20 8"></polyline>
@@ -166,19 +167,6 @@ if ($con->connect_error) {
                             <ul id="reports" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                             </ul>
                         </li>
-                        <!-- <li class="">
-                            <a href="indexRegistered.php" class="">
-                                <svg class="svg-icon" id="p-dash6" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8e3041" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="4 14 10 14 10 20"></polyline>
-                                    <polyline points="20 10 14 10 14 4"></polyline>
-                                    <line x1="14" y1="10" x2="21" y2="3"></line>
-                                    <line x1="3" y1="21" x2="10" y2="14"></line>
-                                </svg>
-                                <span style="color: #8e3041;" class="ml-4">Announcement</span>
-                            </a>
-                            <ul id="reports" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                            </ul>
-                        </li> -->
                 </nav>
 
                 <div class="p-3"></div>
@@ -253,7 +241,7 @@ if ($con->connect_error) {
                             <div class="img__container">
 
 
-                                <img src="./images/<?php echo $row['alumni_Picture']; ?>">
+                                <img src="./images/<?php echo $row['alumni_Picture']; ?>" onerror="this.src='anon2.png'">
                             </div>
                             <div class="column">
 
@@ -261,7 +249,7 @@ if ($con->connect_error) {
                                 <!-- <h5>Software Developer</h5> -->
                                 <!-- <h5>"UBLC helped me achieve my dreams to become what I am today thats why I want to
                             thank them especially...."</h5> -->
-                                <p>"<?php echo $row['alumni_ThoughtsUBLC']; ?>"</p>
+                                <p><?php echo $row['alumni_ThoughtsUBLC']; ?></p>
                             </div>
                             <div class="button">
                                 <a href="alumni_profileEdit.php?edit=<?php echo $row['alumni_StudentNumber']; ?>"><input type="button" value="Edit" name="edit"></a>
@@ -349,14 +337,14 @@ if ($con->connect_error) {
 
                                 </div>
                                 <!-- <div class="button2">
-                            <a href=""><input type="button" value="Edit" name="edit"></a>
-                        </div> -->
-                                <div class="card">
+                                    <a href=""><input type="button" value="Edit" name="edit"></a>
+                                </div> -->
+                                <div style="display: none;" id="employed" class="card">
                                     <h2>Employment Profile</h2>
                                     <h5>Employment Status : </h5>
                                     <!-- <div class="fakeimg" style="height:200px;">Image</div> -->
                                     <!-- <p>Some text..</p> -->
-                                    <p><?php echo $row['alumni_EmployementStatus']; ?></p>
+                                    <p id="EmpStatus" status="<?= $row['alumni_EmployementStatus'] ?>"><?php echo $row['alumni_EmployementStatus']; ?></p>
                                     <h5>Employment Type : </h5>
                                     <p><?php echo $row['alumni_EmployedType']; ?></p>
                                     <h5>Employment Data : </h5>
@@ -372,6 +360,18 @@ if ($con->connect_error) {
                                     <p style="width: 600px;">WAS THE CURRICULUM YOU HAD IN COLLEGE RELEVANT TO YOUR FIRST JOB? : <?php echo $row['alumni_CurriculumRelevant']; ?></p>
                                     <p style="width: 600px;">WHAT COMPETENCIES LEARNED IN COLLEGE DID YOU FIND VERY USEFUL IN YOUR FIRST JOB? : <?php echo $row['alumni_Competencies']; ?></p>
 
+                                </div>
+
+                                <div style="display: none;" id="unemployed" class="card">
+                                    <h2>Employment Profile</h2>
+                                    <h5>Employment Status : </h5>
+                                    <!-- <div class="fakeimg" style="height:200px;">Image</div> -->
+                                    <!-- <p>Some text..</p> -->
+                                    <p id="EmpStatus" status="<?= $row['alumni_EmployementStatus'] ?>"><?php echo $row['alumni_EmployementStatus']; ?></p>
+                                    <h5>Reason for Unemployment : </h5>
+                                    <p><?php echo $row['alumni_ReasonUnemployment']; ?></p>
+                                    <h5>Other Reason(s) : </h5>
+                                    <p><?php echo $row['alumni_OtherReasons']; ?></p>
                                 </div>
 
 
@@ -418,12 +418,30 @@ if ($con->connect_error) {
         ?>
     </div>
 
-    <script src="./js/backend-bundle.min.js"></script>
+    <!-- <script src="./js/backend-bundle.min.js"></script>
 
 
-    <script src="./js/app.js"></script>
+    <script src="./js/app.js"></script> -->
+    <script src="script.js"></script>
+    <script>
+        var employed = document.getElementById('employed');
+        var unemployed = document.getElementById('unemployed');
+        // employed.style.display = "block";
+        // var stat = employed.getElementsByTagName("p")[0];
 
+        var status = employed.querySelector('#EmpStatus').getAttribute('status');
+
+        if (status == 'Employed') {
+            employed.style.display = 'block';
+            unemployed.style.display = 'none';
+        } else {
+            unemployed.style.display = 'block';
+            employed.style.display = 'none';
+        }
+            
+        
     </script>
+
 
 </body>
 

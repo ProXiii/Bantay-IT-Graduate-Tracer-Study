@@ -519,7 +519,7 @@ footer p {
     /* background-color: blueviolet; */
     color: black;
     width: 1000px;
-    height: 250px;
+    height: 300px;
 }
 
 .details .radios {
@@ -567,3 +567,14 @@ footer p {
 /* .details #box  input {
     margin-right: 10px;
 } */
+
+form #profCertif .uploadlabel{
+    width: 100%;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    border: 3px dashed #680707;
+    cursor: pointer;
+}

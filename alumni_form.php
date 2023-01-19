@@ -61,6 +61,7 @@ if (isset($_POST['SubmitForm'])) {
     $alumni_skills = $_POST['skills'];
 
     $alumni_example = $_POST['example'];
+
     $alumni_Type = $_POST['Type'];
     $type = "";
     foreach ($alumni_Type as $pick) {
@@ -78,7 +79,15 @@ if (isset($_POST['SubmitForm'])) {
     $alumni_howLongFirstJob = $_POST['howLongFirstJob'];
     $alumni_example2 = $_POST['example2'];
     $alumni_example3 = $_POST['example3'];
+
     $alumni_reason = $_POST['reason'];
+    $reasons = "";
+    foreach ($alumni_reason as $pick) {
+        $reasons .= $pick . ", ";
+    }
+
+    $alumni_otherReason = $_POST['otherReason'];
+
     $alumni_competencies = $_POST['competencies'];
     $alumni_whyUBLC = $_POST['whyUBLC'];
     $alumni_strengthsWeaknesses = $_POST['strengthsWeaknesses'];
@@ -87,13 +96,13 @@ if (isset($_POST['SubmitForm'])) {
     $alumni_image_tmp_name = $_FILES['p_image']['tmp_name'];
     $alumni_image_folder = './images/' . $alumni_image;
 
-    $insert_query = ("INSERT INTO form_answers(alumni_Picture, alumni_LastName, alumni_FirstName, alumni_MiddleName, alumni_StudentNumber, alumni_Email, alumni_ContactNumber, alumni_Address, alumni_Birthday, alumni_Gender, alumni_CivilStatus, alumni_YearGraduated, alumni_Degree, alumni_DegreeDate, alumni_Seminar, alumni_SeminarDate, alumni_License, alumni_LicenseDate, alumni_Certificate, alumni_CertificateDate, alumni_Skills, alumni_EmployementStatus, alumni_EmployedType, alumni_EmployedCompany, alumni_EmployedPlaceOfWork, alumni_EmployedJobPosition, alumni_EmployedYearsEmployed, alumni_EmployedInitialGross, alumni_EmployedAddressOfWork, alumni_EmployedHowFirstJob, alumni_EmployedHowLongDidItTakeToFindFirstJob, alumni_JobRelatedToCourse, alumni_CurriculumRelevant, alumni_Competencies, alumni_ReasonUnemployment, alumni_ThoughtsUBLC, alumni_Suggestions1, alumni_Suggestions2)
+    $insert_query = ("INSERT INTO form_answers(alumni_Picture, alumni_LastName, alumni_FirstName, alumni_MiddleName, alumni_StudentNumber, alumni_Email, alumni_ContactNumber, alumni_Address, alumni_Birthday, alumni_Gender, alumni_CivilStatus, alumni_YearGraduated, alumni_Degree, alumni_DegreeDate, alumni_Seminar, alumni_SeminarDate, alumni_License, alumni_LicenseDate, alumni_Certificate, alumni_CertificateDate, alumni_Skills, alumni_EmployementStatus, alumni_EmployedType, alumni_EmployedCompany, alumni_EmployedPlaceOfWork, alumni_EmployedJobPosition, alumni_EmployedYearsEmployed, alumni_EmployedInitialGross, alumni_EmployedAddressOfWork, alumni_EmployedHowFirstJob, alumni_EmployedHowLongDidItTakeToFindFirstJob, alumni_JobRelatedToCourse, alumni_CurriculumRelevant, alumni_Competencies, alumni_ReasonUnemployment, alumni_OtherReasons, alumni_ThoughtsUBLC, alumni_Suggestions1, alumni_Suggestions2)
     VALUES(
         '$alumni_image', '$alumni_lastName', '$alumni_firstName', '$alumni_middleName', '$alumni_studentNum','$alumni_emailAdd','$alumni_contactNum',
         '$alumni_presentAddress', '$alumni_birthday', '$alumni_AppSource', '$alumni_civilStat', '$alumni_yearGraduated','$degree','$degreeDate',
         '$alumni_seminar', '$alumni_seminarDate', '$alumni_license', '$alumni_licenseDate', '$alumni_certificate','$alumni_certificateDate','$alumni_skills',
         '$alumni_example', '$type', '$alumni_companyName', '$alumni_workPlace', '$alumni_position','$alumni_yearsEmployed','$alumni_initialGross',
-        '$alumni_companyAdd', '$alumni_howFirstJob', '$alumni_howLongFirstJob', '$alumni_example2', '$alumni_example3','$alumni_competencies','$alumni_reason',
+        '$alumni_companyAdd', '$alumni_howFirstJob', '$alumni_howLongFirstJob', '$alumni_example2', '$alumni_example3','$alumni_competencies','$reasons', '$alumni_otherReason',
         '$alumni_whyUBLC', '$alumni_strengthsWeaknesses', '$alumni_improvements')") or die('query failed');
     if ($insert_query) {
         move_uploaded_file($alumni_image_tmp_name, $alumni_image_folder);
@@ -135,6 +144,7 @@ if (isset($_POST['SubmitForm'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>B a n t a y I T</title>
     <link rel="stylesheet" href="alumni_form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link rel="icon" href="./images/UBlogo.png">
 </head>
 
@@ -166,7 +176,7 @@ if (isset($_POST['SubmitForm'])) {
                 <label style="letter-spacing: 6px;">INSERT PROFILE IMAGE : </label>
                 <input style="margin-bottom:25px; padding-left:15px" type="file" name="p_image" accept="image/png, image/jpg, image/jpeg">
 
-                <label style="position:relative; right:619px; top: 45px" for="">N A M E :</label>
+                <label style="position:relative; right:619px; top: 45px" for=""><span style="color: #680707;">* </span>N A M E :</label>
                 <div style="width: 1150px; margin-top:30px" class="row">
                     <div style="width: 250px;" class="txt_field">
                         <!-- <label for="uname">Last Name</label> -->
@@ -181,18 +191,18 @@ if (isset($_POST['SubmitForm'])) {
                         <input type="text" name="middleName" placeholder="Middle Name">
                     </div>
                 </div>
-                <label for="">C O N T A C T S : </label>
+                <label for=""><span style="color: #680707;">* </span>C O N T A C T S : </label>
                 <div style="width: 1150px; margin-top:10px" class="row">
                     <?php
 
                     $query = mysqli_query($con, "SELECT * FROM alumni_accounts WHERE StudentID = $_SESSION[StudentID]");
                     if (mysqli_num_rows($query) > 0) {
                         while ($fetch_query = mysqli_fetch_assoc($query)) {
-                           
+
                     ?>
                             <div style="width: 250px;" class="txt_field">
                                 <label for="uname"></label>
-                                <input type="text" name="studentNum" readonly value="<?php echo $fetch_query['StudentID']; ?>">
+                                <input style="border-color: #680707;" type="text" name="studentNum" readonly value="<?php echo $fetch_query['StudentID']; ?>">
                             </div>
                     <?php
 
@@ -208,7 +218,7 @@ if (isset($_POST['SubmitForm'])) {
                         <input type="text" name="contactNum" placeholder="Contact Number">
                     </div>
                 </div>
-                <label for="">A D D R E S S : </label>
+                <label for=""><span style="color: #680707;">* </span>A D D R E S S : </label>
                 <div style="width: 1150px; margin-top:10px" class="row">
                     <div style="width: 959px;" class="txt_field">
                         <input type="text" name="presentAddress" placeholder="Present Address">
@@ -218,7 +228,7 @@ if (isset($_POST['SubmitForm'])) {
 
 
                 <div style="position: relative; top:10px; margin-bottom:55px;" class="row">
-                    <label for="start">B I R T H D A Y : </label>
+                    <label for="start"><span style="color: #680707;">* </span>B I R T H D A Y : </label>
 
                     <!-- <input style="margin-left: 54px; margin-right:223px; width:185px" type="date" id="start" name="trip-start" value="2022-01-01" min="1990-01-01" max="2022-12-31"> -->
                     <div class="surveyOptions">
@@ -226,13 +236,13 @@ if (isset($_POST['SubmitForm'])) {
                         <input style="margin-left: 54px; margin-right:46px;width: 229px;" type="date" name="birthday" class="survey_options">
                     </div>
 
-                    <label style="margin-right: 115px; ">G E N D E R : </label>
+                    <label style="margin-right: 115px; "><span style="color: #680707;">* </span>G E N D E R : </label>
                     <input type="radio" name="AppSource" value=Male>Male
-                    <input style="margin-left:40px" type="radio" name="AppSource" value=Female> Female
+                    <input style="margin-left:18px" type="radio" name="AppSource" value=Female> Female
 
                 </div>
                 <div style="margin-bottom:55px; width: 1000px;" class="row">
-                    <label style="margin-right: 15px; letter-spacing:3px">CIVIL STATUS : </label>
+                    <label style="margin-right: 15px; letter-spacing:3px"><span style="color: #680707;">*</span>CIVIL STATUS : </label>
                     <!-- <input type="password" id="password" name="password" > -->
                     <!-- Select your state: -->
                     <div class="surveyOptions">
@@ -253,11 +263,11 @@ if (isset($_POST['SubmitForm'])) {
                         <OPTION VALUE=singleParent>Single Parent
                         <OPTION VALUE=widow>Widowed / Widower
                     </select> -->
-                    <label style="margin-right: 15px; letter-spacing: 3px ">YEAR GRADUATED : </label>
+                    <label style="margin-right: 15px; letter-spacing: 3px "><span style="color: #680707;">*</span>YEAR GRADUATED : </label>
                     <!-- <input type="password" id="password" name="password" > -->
                     <!-- Select your state: -->
                     <div class="surveyOptions">
-                        <select style="width: 185px;" name="yearGraduated">
+                        <select style="width: 155px;" name="yearGraduated">
                             <OPTION VALUE=>
                             <OPTION VALUE=2015>2015
                             <OPTION VALUE=2016>2016
@@ -376,9 +386,9 @@ if (isset($_POST['SubmitForm'])) {
                 </div>
 
             </div>
-            <div style="height: 100%; " class="details">
+            <div style="height: 100%; " class="details" id="profCertif">
                 <!-- <div style="position:relative; bottom:170px" class="group"> -->
-                <label style="letter-spacing: 6px">PROFESSIONAL CERTIFICATE :</label>
+                <label style="letter-spacing: 6px">PROFESSIONAL CERTIFICATES :</label>
                 <div class="surveyOptions" id="survey_options5">
                     <input type="text" name="certificate" class="survey_options" size="50" placeholder="Name of Certificate">
                     <label style="margin-right: 10px;">DATE COMPLETED : </label>
@@ -392,10 +402,62 @@ if (isset($_POST['SubmitForm'])) {
                     <a href="#" id="remove_fields5"><input type="button" value="Remove" name="Submit" onclick="return false"></a>
                 </div>
 
+                <label style="letter-spacing: 6px; display:block; margin-bottom:5px">ATTACH ALL ACQUIRED CERTIFICATES HERE:</label>
+                <label style="letter-spacing: 3px;display:block">Insert file(s)</label>
+                <!-- <form action=""> -->
+
+                <input style="margin-bottom:15px; padding-left:15px" id="upload" accept=".doc, .docx, .pdf, image/png, image/jpg, image/jpeg" type="file" name="p_image" hidden>
+                <label for="upload" class="uploadlabel">
+                    <span><i class="fa fa-cloud-upload"></i></span>
+                    <p>Click to upload</p>
+                </label>
+                <!-- </form> -->
+
             </div>
+            <!-- <div style="height: 100%; " class="details">
+                <div class="loc" id="goHere"></div>
+                <h1>C. Proof of Certification</h1>
+                <hr>
+                <label style="letter-spacing: 6px;">INSERT FILE(s) : </label>
+                <input style="margin-bottom:25px; padding-left:15px" type="file" name="p_image" multiple>
+            </div> -->
             <!-- <div style="margin-bottom: 10px;position:relative;bottom:200px;" class="group"> -->
             <div style="height: 100%; " class="details">
                 <h1>C. Expertise</h1>
+                <hr>
+                <label style="letter-spacing: 8px;">TECHNICAL SKILLS :</label>
+                <div class="surveyOptions" id="survey_options4">
+                    <input type="text" name="skills" class="survey_options" size="50" placeholder="Skill">
+                    <!-- <label style="margin-right: 10px;">DATE COMPLETED : </label> -->
+                    <!-- <input style="width: 170px;" type="date" name="survey_options[]" class="survey_options"> -->
+                </div>
+                <div class="controls">
+                    <a href="#" id="add_more_fields4"><input type="button" value="Add More" name="Submit" onclick="return false"></a>
+
+                </div>
+                <div class="controls">
+                    <a href="#" id="remove_fields4"><input type="button" value="Remove" name="Submit" onclick="return false"></a>
+                </div>
+            </div>
+            <div style="height: 100%; " class="details">
+                <h1>D. Relevant Sites <span style="font-size: 20px;">(e.g portfolio, github, etc.)</span></h1>
+                <hr>
+                <label style="letter-spacing: 8px;">LINKS :</label>
+                <div class="surveyOptions" id="survey_options4">
+                    <input type="text" name="skills" class="survey_options" size="50" placeholder="link">
+                    <!-- <label style="margin-right: 10px;">DATE COMPLETED : </label> -->
+                    <!-- <input style="width: 170px;" type="date" name="survey_options[]" class="survey_options"> -->
+                </div>
+                <div class="controls">
+                    <a href="#" id="add_more_fields4"><input type="button" value="Add More" name="Submit" onclick="return false"></a>
+
+                </div>
+                <div class="controls">
+                    <a href="#" id="remove_fields4"><input type="button" value="Remove" name="Submit" onclick="return false"></a>
+                </div>
+            </div>
+            <div style="height: 100%; " class="details">
+                <h1>E. Expertise</h1>
                 <hr>
                 <label style="letter-spacing: 8px;">TECHNICAL SKILLS :</label>
                 <div class="surveyOptions" id="survey_options4">
@@ -469,11 +531,11 @@ if (isset($_POST['SubmitForm'])) {
 
 
             <div style="margin-top: 40px;" class="details">
-                <h1>D. Employment Profile</h1>
+                <h1>F. Employment Profile</h1>
                 <hr>
                 <div class="row">
                     <div style="width: 600px;" class="txt_field">
-                        <label style="letter-spacing: 6px">EMPLOYMENT STATUS :</label>
+                        <label style="letter-spacing: 6px"><span style="color: #680707;">*</span>EMPLOYMENT STATUS :</label>
                     </div>
                 </div>
 
@@ -679,24 +741,26 @@ if (isset($_POST['SubmitForm'])) {
 
                     <div class="row">
 
-                        <input type="checkbox" name="reason" value="Advance or further study">Advance or further study
-                        <input style="margin-left: 100px;" type="checkbox" name="reason" value="Family concern and decided not to find a job">Family concern and decided not to find a job
+                        <input type="checkbox" name="reason[]" value="Advance or further study">Advance or further study
+                        <input style="margin-left: 100px;" type="checkbox" name="reason[]" value="Family concern and decided not to find a job">Family concern and decided not to find a job
                     </div>
 
                     <div class="row">
 
-                        <input type="checkbox" name="reason" value="Health-related reason(s)">Health-related reason(s)
-                        <input style="margin-left: 97px;" type="checkbox" name="reason" value="Lack of work experience">Lack of work experience
+                        <input type="checkbox" name="reason[]" value="Health-related reason(s)">Health-related reason(s)
+                        <input style="margin-left: 97px;" type="checkbox" name="reason[]" value="Lack of work experience">Lack of work experience
                     </div>
 
                     <div class="row">
 
-                        <input type="checkbox" name="reason" value="noJobOpportunity">No job opportunity
-                        <input style="margin-left: 150px;" type="checkbox" name="reason" value="Did not look for a job">Did not look for a job
+                        <input type="checkbox" name="reason[]" value="No job opportunity">No job opportunity
+                        <input style="margin-left: 150px;" type="checkbox" name="reason[]" value="Did not look for a job">Did not look for a job
                     </div>
+
+                    <label>OTHER REASON(S) :</label>
                     <div style="margin-top: 15px; margin-bottom:15px" class="row">
 
-                        <TEXTAREA name="reason" cols=105 rows=6 placeholder="Others..."></TEXTAREA>
+                        <TEXTAREA name="otherReason" cols=105 rows=6 placeholder="Others..."></TEXTAREA>
                     </div>
 
 
@@ -723,7 +787,7 @@ if (isset($_POST['SubmitForm'])) {
 
             </div>
             <div style="margin-top: 20px;" class="details">
-                <h1>E. Why UBLC?</h1>
+                <h1>G. Why UBLC?</h1>
                 <hr>
                 Give your thoughts below:
 
@@ -735,7 +799,7 @@ if (isset($_POST['SubmitForm'])) {
 
             </div>
             <div style="margin-top: 25px;" class="details">
-                <h1>F. Suggestions</h1>
+                <h1>H. Suggestions</h1>
                 <hr>
                 What are the strengths and weaknesses of the program offered by UBLC as perceived by its graduates?
 

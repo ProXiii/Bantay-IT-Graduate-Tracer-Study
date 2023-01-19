@@ -111,7 +111,14 @@ if (isset($_POST['edits'])) {
     $update_alumni_howLongFirstJob = $_POST['howLongFirstJob'];
     $update_alumni_example2 = $_POST['example2'];
     $update_alumni_example3 = $_POST['example3'];
+
     $update_alumni_reason = $_POST['reason'];
+    $reasons = "";
+    foreach ($update_alumni_reason as $pick) {
+        $reasons .= $pick . ", ";
+    }
+
+    $update_alumni_otherReason = $_POST['otherReason'];
     $update_alumni_competencies = $_POST['competencies'];
     $update_alumni_whyUBLC = $_POST['whyUBLC'];
     $update_alumni_strengthsWeaknesses = $_POST['strengthsWeaknesses'];
@@ -133,7 +140,7 @@ if (isset($_POST['edits'])) {
          alumni_EmployedInitialGross = '$update_alumni_initialGross', alumni_EmployedAddressOfWork = '$update_alumni_companyAdd',
           alumni_EmployedHowFirstJob = '$update_alumni_howFirstJob', alumni_EmployedHowLongDidItTakeToFindFirstJob = '$update_alumni_howLongFirstJob',
            alumni_JobRelatedToCourse = '$update_alumni_example2', alumni_CurriculumRelevant = '$update_alumni_example3', alumni_Competencies = '$update_alumni_competencies',
-            alumni_ReasonUnemployment = '$update_alumni_reason', alumni_ThoughtsUBLC = '$update_alumni_whyUBLC', alumni_Suggestions1 = '$update_alumni_strengthsWeaknesses',
+            alumni_ReasonUnemployment = '$reasons', alumni_OtherReasons = '$update_alumni_otherReason', alumni_ThoughtsUBLC = '$update_alumni_whyUBLC', alumni_Suggestions1 = '$update_alumni_strengthsWeaknesses',
              alumni_Suggestions2 = '$update_alumni_improvements' WHERE alumni_StudentNumber = $_SESSION[alumni_StudentNumber]");
 
     if ($insert_query) {
@@ -227,10 +234,22 @@ if (isset($_POST['edits'])) {
 
                             <label for="">C O N T A C T S : </label>
                             <div style="width: 1150px; margin-top:10px" class="row">
-                                <div style="width: 250px;" class="txt_field">
-                                    <label for="uname"></label>
-                                    <input type="text" name="studentNum" placeholder="Student Number" value="<?php echo $fetch_edit['alumni_StudentNumber']; ?>">
-                                </div>
+                                <?php
+
+                                $query = mysqli_query($con, "SELECT * FROM alumni_accounts WHERE StudentID = $_SESSION[StudentID]");
+                                if (mysqli_num_rows($query) > 0) {
+                                    while ($fetch_query = mysqli_fetch_assoc($query)) {
+
+                                ?>
+                                        <div style="width: 250px;" class="txt_field">
+                                            <label for="uname"></label>
+                                            <input style="border-color: #680707;" type="text" name="studentNum" readonly value="<?php echo $fetch_query['StudentID']; ?>">
+                                        </div>
+                                <?php
+
+                                    };
+                                };
+                                ?>
                                 <div style="width: 300px;" class="txt_field">
                                     <label></label>
                                     <input type="email" name="emailAdd" placeholder="Email" value="<?php echo $fetch_edit['alumni_Email']; ?>">
@@ -291,7 +310,7 @@ if (isset($_POST['edits'])) {
                                 <!-- Select your state: -->
                                 <div class="surveyOptions">
                                     <select style="width: 185px;" name="yearGraduated">
-                                        <OPTION VALUE=> "<?php echo $fetch_edit['alumni_YearGraduated']; ?>"
+                                        <OPTION VALUE=><?php echo $fetch_edit['alumni_YearGraduated']; ?>
                                         <OPTION VALUE=2015>2015
                                         <OPTION VALUE=2016>2016
                                         <OPTION VALUE=2017>2017
@@ -712,28 +731,27 @@ if (isset($_POST['edits'])) {
 
                                 <div class="row">
 
-                                    <input type="checkbox" name="reason" value="Advance or further study">Advance or further study
-                                    <input style="margin-left: 100px;" type="checkbox" name="reason" value="Family concern and decided not to find a job">Family concern and decided not to find a job
+                                    <input type="checkbox" name="reason[]" value="Advance or further study">Advance or further study
+                                    <input style="margin-left: 100px;" type="checkbox" name="reason[]" value="Family concern and decided not to find a job">Family concern and decided not to find a job
                                 </div>
 
                                 <div class="row">
 
-                                    <input type="checkbox" name="reason" value="Health-related reason(s)">Health-related reason(s)
-                                    <input style="margin-left: 97px;" type="checkbox" name="reason" value="Lack of work experience">Lack of work experience
+                                    <input type="checkbox" name="reason[]" value="Health-related reason(s)">Health-related reason(s)
+                                    <input style="margin-left: 97px;" type="checkbox" name="reason[]" value="Lack of work experience">Lack of work experience
                                 </div>
 
                                 <div class="row">
 
-                                    <input type="checkbox" name="reason" value="noJobOpportunity">No job opportunity
-                                    <input style="margin-left: 150px;" type="checkbox" name="reason" value="Did not look for a job">Did not look for a job
+                                    <input type="checkbox" name="reason[]" value="No job opportunity">No job opportunity
+                                    <input style="margin-left: 150px;" type="checkbox" name="reason[]" value="Did not look for a job">Did not look for a job
                                 </div>
+
+                                <label>OTHER REASON(S) :</label>
                                 <div style="margin-top: 15px; margin-bottom:15px" class="row">
 
-                                    <TEXTAREA name="reason" cols=105 rows=6 placeholder="Others..." value="<?php echo $fetch_edit['alumni_ReasonUnemployment']; ?>"></TEXTAREA>
+                                    <TEXTAREA name="otherReason" cols=105 rows=6 placeholder="Others..."></TEXTAREA>
                                 </div>
-
-
-
                             </div>
 
                             <div id="box3">
@@ -762,7 +780,7 @@ if (isset($_POST['edits'])) {
 
                             <div style="margin-top: 15px;" class="row">
 
-                                <TEXTAREA name="whyUBLC" cols=130 rows=6 value="<?php echo $fetch_edit['alumni_ThoughtsUBLC']; ?>"></TEXTAREA>
+                                <TEXTAREA name="whyUBLC" cols=130 rows=6><?php echo $fetch_edit['alumni_ThoughtsUBLC']; ?></TEXTAREA>
                             </div>
 
 
@@ -774,13 +792,13 @@ if (isset($_POST['edits'])) {
 
                             <div style="margin-top: 15px; margin-bottom:15px" class="row">
 
-                                <TEXTAREA name="strengthsWeaknesses" cols=130 rows=6 value="<?php echo $fetch_edit['alumni_Suggestions1']; ?>"></TEXTAREA>
+                                <TEXTAREA name="strengthsWeaknesses" cols=130 rows=6><?php echo $fetch_edit['alumni_Suggestions1']; ?></TEXTAREA>
                             </div>
                             Propose suggestions to improve the quality of education offered by CITEC.
 
                             <div style="margin-top: 15px;" class="row">
 
-                                <TEXTAREA name="improvements" cols=130 rows=6 value="<?php echo $fetch_edit['alumni_Suggestions2']; ?>"></TEXTAREA>
+                                <TEXTAREA name="improvements" cols=130 rows=6><?php echo $fetch_edit['alumni_Suggestions2']; ?></TEXTAREA>
                             </div>
 
                         </div>

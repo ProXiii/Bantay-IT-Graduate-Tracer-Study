@@ -94,7 +94,7 @@ if (isset($_GET['ID'])) {
                             <ul id="return" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                                 <li class="active">
                                     <a href="partner_viewAlumni.php">
-                                        <i class="las la-minus"></i><span style="color: #8e3041;">View</span>
+                                        <i class="las la-minus"></i><span style="color: #8e3041;">Forms</span>
                                     </a>
                                 </li>
 
@@ -116,19 +116,20 @@ if (isset($_GET['ID'])) {
                             <ul id="reports" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                             </ul>
                         </li>
-                        <!-- <li class="">
-                            <a href="indexRegistered.php" class="">
-                                <svg class="svg-icon" id="p-dash6" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8e3041" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="4 14 10 14 10 20"></polyline>
-                                    <polyline points="20 10 14 10 14 4"></polyline>
-                                    <line x1="14" y1="10" x2="21" y2="3"></line>
-                                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                        <li class="">
+                            <a href="partner_changePass.php" class="">
+                                <svg class="svg-icon" id="p-dash7" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8e3041" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
                                 </svg>
-                                <span style="color: #8e3041;" class="ml-4">Announcement</span>
+                                <span style="color: #8e3041;" class="ml-4">Change Password</span>
                             </a>
                             <ul id="reports" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                             </ul>
-                        </li> -->
+                        </li>
                 </nav>
 
                 <div class="p-3"></div>
@@ -186,7 +187,7 @@ if (isset($_GET['ID'])) {
                     <div class="img__container">
 
 
-                        <img src="./images/<?php echo $row['alumni_Picture']; ?>">
+                        <img src="./images/<?php echo $row['alumni_Picture']; ?>" onerror="this.src='anon2.png'">
 
                     </div>
                     <div class="column">
@@ -197,9 +198,9 @@ if (isset($_GET['ID'])) {
                             thank them especially...."</h5> -->
                         <p>"<?php echo $row['alumni_ThoughtsUBLC']; ?>"</p>
                     </div>
-                    <div class="button">
+                    <!-- <div class="button">
                         <a href=""><input type="button" value="Edit" name="edit"></a>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="row">
@@ -236,12 +237,12 @@ if (isset($_GET['ID'])) {
                         <!-- <div class="button2">
                             <a href=""><input type="button" value="Edit" name="edit"></a>
                         </div> -->
-                        <div class="card">
+                        <div style="display: none;" id="employed" class="card">
                             <h2>Employment Profile</h2>
                             <h5>Employment Status : </h5>
                             <!-- <div class="fakeimg" style="height:200px;">Image</div> -->
                             <!-- <p>Some text..</p> -->
-                            <p><?php echo $row['alumni_EmployementStatus']; ?></p>
+                            <p id="EmpStatus" status="<?= $row['alumni_EmployementStatus'] ?>"><?php echo $row['alumni_EmployementStatus']; ?></p>
                             <h5>Employment Type : </h5>
                             <p><?php echo $row['alumni_EmployedType']; ?></p>
                             <h5>Employment Data : </h5>
@@ -257,6 +258,18 @@ if (isset($_GET['ID'])) {
                             <p style="width: 600px;">Was the curriculum you had in college relevant to your first job?: <?php echo $row['alumni_CurriculumRelevant']; ?></p>
                             <p style="width: 600px;">If yes, what competencies learned in college did you find very useful in your first job?: <?php echo $row['alumni_Competencies']; ?></p>
 
+                        </div>
+
+                        <div style="display: none;" id="unemployed" class="card">
+                            <h2>Employment Profile</h2>
+                            <h5>Employment Status : </h5>
+                            <!-- <div class="fakeimg" style="height:200px;">Image</div> -->
+                            <!-- <p>Some text..</p> -->
+                            <p id="EmpStatus" status="<?= $row['alumni_EmployementStatus'] ?>"><?php echo $row['alumni_EmployementStatus']; ?></p>
+                            <h5>Reason for Unemployment : </h5>
+                            <p><?php echo $row['alumni_ReasonUnemployment']; ?></p>
+                            <h5>Other Reason(s) : </h5>
+                            <p><?php echo $row['alumni_OtherReasons']; ?></p>
                         </div>
 
 
@@ -299,7 +312,22 @@ if (isset($_GET['ID'])) {
 
     <script src="./js/app.js"></script>
 
+    <script>
+        var employed = document.getElementById('employed');
+        var unemployed = document.getElementById('unemployed');
+        // employed.style.display = "block";
+        // var stat = employed.getElementsByTagName("p")[0];
 
+        var status = employed.querySelector('#EmpStatus').getAttribute('status');
+
+        if (status == 'Employed') {
+            employed.style.display = 'block';
+            unemployed.style.display = 'none';
+        } else {
+            unemployed.style.display = 'block';
+            employed.style.display = 'none';
+        }
+    </script>
 </body>
 
 </html>

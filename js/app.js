@@ -610,3 +610,16 @@ Index Of Script
     });
   }
 })(jQuery);
+
+
+// document.addEventListener("DOMContentLoaded", function(event) {
+//   document.querySelectorAll('img').forEach(function(img){
+//    img.onerror = function(){this.style.display='none';};
+//   })
+// });
+
+// const img = document.getElementById("image")
+// img.addEventListener("error", function(event) {
+//   event.target.src = "../anon2.png"
+//   event.onerror = null
+// })

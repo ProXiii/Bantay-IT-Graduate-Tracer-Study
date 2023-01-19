@@ -108,7 +108,7 @@ if ($con->connect_error) {
                             <ul id="return" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                                 <li class="">
                                     <a href="admin_viewAlumni.php">
-                                        <i class="las la-minus"></i><span style="color: #8e3041;">View</span>
+                                        <i class="las la-minus"></i><span style="color: #8e3041;">Forms</span>
                                     </a>
                                 </li>
                                 <li class="">

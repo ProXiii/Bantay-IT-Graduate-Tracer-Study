@@ -4,14 +4,17 @@ session_start();
 include("connection.php");
 include("functions.php");
 
-$user_data = check_login($con);
+$user_data = check_loginPartner($con);
 // $user_form = check_form($con);
 
 if (!isset($_SESSION)) {
     session_start();
 }
 
+ini_set("display_errors", 1);
 error_reporting(0);
+error_reporting(E_ALL);
+
 
 $host = 'localhost';
 $username = "root";
@@ -22,6 +25,38 @@ $con = new mysqli($host, $username, $password, $database);
 
 if ($con->connect_error) {
     echo $con->connect_error;
+}
+
+if (isset($_POST['submit'])) {
+
+
+    $currentpw = $_POST['currentPassword'];
+    $newpw = $_POST['newPassword'];
+    $confirmnewpw = $_POST['confirmNewPassword'];
+    $data = $_POST;
+
+    $alumni_data = mysqli_query($con, "SELECT * FROM partner_account WHERE PartnerID = $_SESSION[PartnerID]");
+    // $data = $con->query($alumni_data) or die($con->error);
+    $row = $alumni_data->fetch_assoc();
+    // $total = $data->num_rows;
+    if (mysqli_num_rows($alumni_data) > 0) {
+        if ($currentpw != $row['Password']) {
+            echo '<script>alert("Your old password is incorrect!")</script>';
+        } else if ($data['newPassword'] == $currentpw) {
+            echo '<script>alert("New password is the same as the old password!")</script>';
+        } else if ($data['newPassword'] != $data['confirmNewPassword']) {
+            echo '<script>alert("New password and Confirm password should match!")</script>';
+        }else {
+            $update_query = mysqli_query($con, "UPDATE partner_account SET Password = '$newpw' WHERE PartnerID = $_SESSION[PartnerID]") or die('query failed');
+            if ($update_query) {
+                echo '<script>alert("Password successfully changed!")</script>';
+                die("<script>window.location = 'partner_changePass.php';</script>");
+            } else {
+                header('location:partner_changePass.php');
+            };
+            $con->query($update_query) or die($con->error);
+        }
+    } 
 }
 
 ?>
@@ -44,10 +79,7 @@ if ($con->connect_error) {
 
         <div class="iq-sidebar  sidebar-default ">
             <div style="height: 100px;" class="iq-sidebar-logo d-flex align-items-center justify-content-between">
-                <!-- <a href="../backend/index.html" class="header-logo">
-                    <img style="height: 60px; width:175px; position: relative;left: 35px;" src="./images/rgamingemporium-removebg-preview.png" class="img-fluid rounded-normal light-logo" alt="logo">
-                    <h5 class="logo-title light-logo ml-3"></h5>
-                </a> -->
+
 
             </div>
             <div style="padding-top: 20px;" class="data-scrollbar" data-scroll="1">
@@ -64,76 +96,35 @@ if ($con->connect_error) {
                                 <span style="color: #8e3041;" class="ml-4">Dashboard</span>
                             </a>
                         </li>
-                        <!-- <li class="">
-                            <a href="items_admin.php" class="">
-                                <svg class="svg-icon" id="p-dash2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="9" cy="21" r="1"></circle>
-                                    <circle cx="20" cy="21" r="1"></circle>
-                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                </svg>
-                                <span class="ml-4">Items</span>
-                            </a>
-                        </li> -->
+
 
                         <li class="">
-                            <a href="alumni_profile.php" class="">
+                            <a href="#return" class="collapsed" data-toggle="collapse" aria-expanded="false">
                                 <svg class="svg-icon" id="p-dash3" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8e3041" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="9" cy="7" r="4"></circle>
                                     <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                                     <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                                 </svg>
-                                <span style="color: #8e3041;" class="ml-4">Profile</span>
-
-                            </a>
-
-                        </li>
-
-                        <!-- <li class=" ">
-                            <a href="#return" class="collapsed" data-toggle="collapse" aria-expanded="false">
-                                <svg class="svg-icon" id="p-dash2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#226A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="9" cy="21" r="1"></circle>
-                                    <circle cx="20" cy="21" r="1"></circle>
-                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                </svg>
-                                <span style="color: #226A80;" class="ml-4">Items</span>
-                                <svg class="svg-icon iq-arrow-right arrow-active" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#226A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <span style="color: #8e3041;" class="ml-4">Alumni</span>
+                                <svg class="svg-icon iq-arrow-right arrow-active" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8e3041" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="10 15 15 20 20 15"></polyline>
                                     <path d="M4 4h7a4 4 0 0 1 4 4v12"></path>
                                 </svg>
                             </a>
                             <ul id="return" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                                <li class="">
-                                    <a href="items_admin.php">
-                                        <i class="las la-minus"></i><span style="color: #226A80;">Add Item</span>
-                                    </a>
-                                </li>
-                                <li class="">
-                                    <a href="./registeredUser-Pages/products2.php">
-                                        <i class="las la-minus"></i><span style="color: #226A80;">View Items</span>
+                                <li class="active">
+                                    <a href="partner_viewAlumni.php">
+                                        <i class="las la-minus"></i><span style="color: #8e3041;">Forms</span>
                                     </a>
                                 </li>
 
-                            </ul>
-                        </li> -->
-
-                        <li class="">
-                            <a href="" class="">
-                                <svg class="svg-icon" id="p-dash7" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8e3041" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                                <span style="color: #8e3041;" class="ml-4">Announcements</span>
-                            </a>
-                            <ul id="reports" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                             </ul>
                         </li>
 
-                        <li class="active">
-                            <a href="alumni_message.php" class="">
+
+                        <li class="">
+                            <a href="partner_message.php" class="">
                                 <svg class="svg-icon" id="p-dash7" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8e3041" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                     <polyline points="14 2 14 8 20 8"></polyline>
@@ -146,8 +137,8 @@ if ($con->connect_error) {
                             <ul id="reports" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                             </ul>
                         </li>
-                        <li class="">
-                            <a href="alumni_changePass.php" class="">
+                        <li class="active">
+                            <a href="partner_changePass.php" class="">
                                 <svg class="svg-icon" id="p-dash7" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8e3041" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                     <polyline points="14 2 14 8 20 8"></polyline>
@@ -160,7 +151,6 @@ if ($con->connect_error) {
                             <ul id="reports" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                             </ul>
                         </li>
-                          
                 </nav>
 
                 <div class="p-3"></div>
@@ -170,36 +160,14 @@ if ($con->connect_error) {
             <a href="index.php" class="logo">
                 <img src="./images/ub5-removebg-preview.png" alt="">
             </a>
-            <!-- <h1 style="color: black; "> -->
 
-            <!-- Bantay IT : Graduate Tracer -->
-            <!-- </h1> -->
-
-            <!-- <h2 style="color: #F9AE3B; position: relative; left: 450px; bottom: 15px">ALUMNI</h2>
-            <a style="text-decoration: none;" href="">
-                <h3 style="color: white; position: relative; top: 20px; left: 95px;">Alumni</h3>
-            </a>
-            <a style="text-decoration: none;" href="admin_login.php">
-                <h3 style="color: white; position: relative; top: 20px; left: 50px;">Admin</h3>
-            </a>
-            <a style="text-decoration: none;" href="partner_login.php">
-                <h3 style="color: white; position: relative; top: 20px; ">Partner</h3>
-            </a> -->
             <div class="navigation">
                 <ul class="menu">
-                    <!--<div class="close-btn"></div>-->
-                    <!--<li class="menu-item"><a href="index.php">Home</a></li>-->
-
-
-                    <!--<li class="menu-item"><a href="#">About Us</a></li>-->
-                    <!--<li class="menu-item"><a href="#">Contact Us</a></li>-->
 
 
                     <li style="position:relative;left:120px;top:18px;height:90px" class="menu-item">
                         <h3 style="color: #8e3041;" class="mb-3">ALUMNI</h3>
                         <img style="position: relative;bottom:3px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABBElEQVQ4je2QQUrDUBCG/3m5RONCjLtumrQHkCTioxQt3bj0EMZzJN0LUuzCKO6FPrAVRbArA13ULqQPXTQeohlXwaoxeIB+u5n55/+HAdYAACLb64d1b/c/2m7N9yPb6+e1AIAMfEqMy6jmH5QH+ZIFXzFEL+8ZAKA+9JusbD8ScSxNa6ZSPfu13HCbAM6JRCdIbh++GQCASufvexvWUGSIm+bW6yDVL/ksdLwWMfVYcCd4Hj2tGhurhVrohaxsDkHiQpqWVqmehra7T0RnYGqfJKPxz8uo8FGO6zDoBoxrEA4J3DpO7pIibaEBAHQbO1XOjBjL5VEwuZ/8pSuFSwLWfPEJGqRW82STutMAAAAASUVORK5CYII=">
-                        <!-- <a class="sub-btn" href="#"> <i class="fas fa-user"></i></a> -->
-                        <!-- <a class="sub-btn" href="#"> <i class="fas fa-user"></i></a> -->
 
                         <ul style="width: 135px; margin-top:8px; " class="sub-menu">
                             <li style="position: relative; right:5px" class="sub-item"><a href="logout.php">Log Out</a></li>
@@ -216,50 +184,47 @@ if ($con->connect_error) {
 
         <div class="content-page">
             <div class="container-fluid">
-                <!-- <h1>Contact Us</h1> -->
-                <h3 style="color: #8e3041;" class="mb-3">Contact Us</h3>
-                <form style="position: relative; left:150px;" action="https://formspree.io/f/mzbwkqjd" method="post">
+
+                <h3 style="color: #8e3041;" class="mb-3">Change Password</h3>
+                <form style="position: relative; left:150px;" action="" method="post">
                     <div class="details">
                         <div class="row">
                             <div style="width: 300px; display:inline-block;margin-right:46px" class="txt_field">
-                                <label for="FullName">Full Name</label>
-                                <input type="text" name="Full Name" id="FullName" required>
-                                <!-- <input type="text" name="name" id="full-name" placeholder="First and Last" required=""> -->
+                                <label>Old Password</label>
+                                <input type="password" name="currentPassword">
+
                             </div>
                             <div style="width: 300px; display:inline-block" class="txt_field">
-                                <label for="EmailAdd">Email</label>
-                                <input type="email" name="Email Address" id="EmailAdd" required>
+                                <label>New Password</label>
+                                <input type="password" name="newPassword">
                             </div>
                         </div>
-
-                        <div style="position: relative; right:15px" class="txt_field">
-                            <label for="Subject">Subject</label>
-                            <input type="text" name="Subject" id="Subject" required>
+                        <div class="row">
+                            <div style="width: 300px; display:inline-block" class="txt_field">
+                                <label>Confirm New Password</label>
+                                <input type="password" name="confirmNewPassword">
+                            </div>
                         </div>
-                    </div>
-                    <label style="position:relative; right:15px" for="Message">Message</label>
-                    <div style=" position:relative; right:15px" class="txt_field">
-
-                        <textarea style="width:650px; height:100px; " name="Message" id="Message" cols="10" rows="10" required></textarea>
                     </div>
                     <div class="row">
                         <div class="button">
-                            <input type="submit" placeholder="Send Message">
+                            <input type="submit" value="Update Password" name="submit">
+
                         </div>
                     </div>
                 </form>
-                
+
             </div>
 
         </div>
     </div>
-    <script>
+    <!-- <script>
         window.onbeforeunload = () => {
             for (const form of document.getElementsByTagName('form')) {
                 form.reset();
             }
         }
-    </script>
+    </script> -->
     <script src="./js/backend-bundle.min.js"></script>
 
 

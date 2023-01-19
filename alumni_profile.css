@@ -17412,7 +17412,10 @@ form input[type="radio"] {
     /* text-align: center; */
     /* padding-top: 20px; */
     position: relative;
-    top:15px
+    top:15px;
+    /* background-image: url("anon2.png");
+    background-size: cover; */
+  
 }
 
 .content-page .container-fluid .header2 .img__container span {
@@ -17427,7 +17430,7 @@ form input[type="radio"] {
 }
 
 .content-page .container-fluid .header2 .column{
-    width: 500px;
+    width: 600px;
     display: inline-block;
     margin-left: 30px;
     /* padding-bottom: 20px; */
@@ -17440,7 +17443,7 @@ form input[type="radio"] {
     margin: 25px 0 25px 0;
     position: relative;
     bottom: 140px;
-    left: 180px
+    left: 80px
 }
 
 .content-page .container-fluid .header2 .button input {
@@ -17492,3 +17495,9 @@ form input[type="radio"] {
     background: #680707;
 }
 
+.row .leftcolumn .card .rowCateg li{
+    color: #000;
+}
+.row .rightcolumn .card li{
+    color: #000;
+}

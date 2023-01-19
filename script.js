@@ -281,13 +281,13 @@ function handleRadioClick() {
   if (document.getElementById('shows').checked) {
     box2.style.display = 'block';
     box.style.display = 'none';
-    
+
   }
-   else if(document.getElementById('show').checked){
+  else if (document.getElementById('show').checked) {
     box2.style.display = 'none';
     box.style.display = 'block';
     // box2.style.visibility = 'visible';
-  } 
+  }
   else {
     box.style.display = 'none';
     box2.style.display = 'none';
@@ -311,20 +311,22 @@ function handleRadioClick() {
 function handleRadioClick2() {
   if (document.getElementById('shows5').checked) {
     box3.style.display = 'block';
-    
+
   }
-   else if(document.getElementById('shows6').checked){
+  else if (document.getElementById('shows6').checked) {
     box3.style.display = 'none';
     // box2.style.visibility = 'visible';
-  } 
+  }
   else {
     box3.style.display = 'none';
- 
+
     // document.getElementById('shows').box2.style.display = 'none';
     // box2.style.visibility = 'hidden';
   }
 
 }
+
+
 
 const radioButtons = document.querySelectorAll('input[name="example"]');
 radioButtons.forEach(radio => {
@@ -336,90 +338,120 @@ radioButtons2.forEach(radio => {
   radio.addEventListener('click', handleRadioClick2);
 });
 
+
+
 // const radioButtons2 = document.querySelectorAll('input[name="example"]');
 // radioButtons2.forEach(radio => {
 //   radio.addEventListener('click', handleRadioClick2);
 // });
 
-$('#options').change(function(){
+
+
+// // var input = document.getElementById("EmpStatus");
+// var classs = document.getElementsByClassName("row");
+// var employed = classs.getElementById("employed");
+// // var stat = employed.getElementsByTagName("p");
+// var status = employed.getElementsById("EmpStatus");
+
+// var statuss = status.textContent;
+
+// // var unemployed = document.getElementById("unemployed");
+// // var value = input.textContent;
+
+// if (status.innerText("Employed")) {
+//   employed.style.display = "block";
+//   // unemployed.style.display = "none";
+// }
+// // else if(status.contains("Unemployed")){
+// //     employed.style.display ="none";
+// //     unemployed.style.display = "block";
+// // } else{
+// //     employed.style.display ="none";
+// //     unemployed.style.display = "none";
+// // }
+
+
+
+$('#options').change(function () {
   if ($(this)[0].options[1].selected) {
-      $("#batch2015").show();
-      $("#batch2016").hide();
-      $("#batch2017").hide();
-      $("#batch2018").hide();
-      $("#batch2019").hide();
-      $("#batch2020").hide();
-      $("#batch2021").hide();
-      $("#batch2022").hide();
-   }
+    $("#batch2015").show();
+    $("#batch2016").hide();
+    $("#batch2017").hide();
+    $("#batch2018").hide();
+    $("#batch2019").hide();
+    $("#batch2020").hide();
+    $("#batch2021").hide();
+    $("#batch2022").hide();
+  }
   if ($(this)[0].options[2].selected) {
-      $("#batch2016").show();
-      $("#batch2015").hide();
-      $("#batch2017").hide();
-      $("#batch2018").hide();
-      $("#batch2019").hide();
-      $("#batch2020").hide();
-      $("#batch2021").hide();
-      $("#batch2022").hide();
-   }
+    $("#batch2016").show();
+    $("#batch2015").hide();
+    $("#batch2017").hide();
+    $("#batch2018").hide();
+    $("#batch2019").hide();
+    $("#batch2020").hide();
+    $("#batch2021").hide();
+    $("#batch2022").hide();
+  }
   if ($(this)[0].options[2].selected) {
-      $("#batch2017").show();
-      $("#batch2015").hide();
-      $("#batch2016").hide();
-      $("#batch2018").hide();
-      $("#batch2019").hide();
-      $("#batch2020").hide();
-      $("#batch2021").hide();
-      $("#batch2022").hide();
-   }
+    $("#batch2017").show();
+    $("#batch2015").hide();
+    $("#batch2016").hide();
+    $("#batch2018").hide();
+    $("#batch2019").hide();
+    $("#batch2020").hide();
+    $("#batch2021").hide();
+    $("#batch2022").hide();
+  }
   if ($(this)[0].options[2].selected) {
-      $("#batch2018").show();
-      $("#batch2015").hide();
-      $("#batch2016").hide();
-      $("#batch2017").hide();
-      $("#batch2019").hide();
-      $("#batch2020").hide();
-      $("#batch2021").hide();
-      $("#batch2022").hide();
-   }
+    $("#batch2018").show();
+    $("#batch2015").hide();
+    $("#batch2016").hide();
+    $("#batch2017").hide();
+    $("#batch2019").hide();
+    $("#batch2020").hide();
+    $("#batch2021").hide();
+    $("#batch2022").hide();
+  }
   if ($(this)[0].options[2].selected) {
-      $("#batch2019").show();
-      $("#batch2015").hide();
-      $("#batch2016").hide();
-      $("#batch2017").hide();
-      $("#batch2018").hide();
-      $("#batch2020").hide();
-      $("#batch2021").hide();
-      $("#batch2022").hide();
-   }
+    $("#batch2019").show();
+    $("#batch2015").hide();
+    $("#batch2016").hide();
+    $("#batch2017").hide();
+    $("#batch2018").hide();
+    $("#batch2020").hide();
+    $("#batch2021").hide();
+    $("#batch2022").hide();
+  }
   if ($(this)[0].options[2].selected) {
-      $("#batch2020").show();
-      $("#batch2015").hide();
-      $("#batch2016").hide();
-      $("#batch2017").hide();
-      $("#batch2018").hide();
-      $("#batch2019").hide();
-      $("#batch2021").hide();
-      $("#batch2022").hide();
-   }
+    $("#batch2020").show();
+    $("#batch2015").hide();
+    $("#batch2016").hide();
+    $("#batch2017").hide();
+    $("#batch2018").hide();
+    $("#batch2019").hide();
+    $("#batch2021").hide();
+    $("#batch2022").hide();
+  }
   if ($(this)[0].options[2].selected) {
-      $("#batch2021").show();
-      $("#batch2015").hide();
-      $("#batch2016").hide();
-      $("#batch2017").hide();
-      $("#batch2018").hide();
-      $("#batch2019").hide();
-      $("#batch2020").hide();
-      $("#batch2022").hide();
-   }
+    $("#batch2021").show();
+    $("#batch2015").hide();
+    $("#batch2016").hide();
+    $("#batch2017").hide();
+    $("#batch2018").hide();
+    $("#batch2019").hide();
+    $("#batch2020").hide();
+    $("#batch2022").hide();
+  }
   if ($(this)[0].options[2].selected) {
-      $("#batch2022").show();
-      $("#batch2015").hide();
-      $("#batch2016").hide();
-      $("#batch2017").hide();
-      $("#batch2018").hide();
-      $("#batch2019").hide();
-      $("#batch2020").hide();
-      $("#batch2021").hide();
-   }
+    $("#batch2022").show();
+    $("#batch2015").hide();
+    $("#batch2016").hide();
+    $("#batch2017").hide();
+    $("#batch2018").hide();
+    $("#batch2019").hide();
+    $("#batch2020").hide();
+    $("#batch2021").hide();
+  }
 });
+
