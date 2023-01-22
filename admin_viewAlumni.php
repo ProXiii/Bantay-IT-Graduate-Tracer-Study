@@ -90,20 +90,30 @@ if (isset($_POST['search'])) {
  
 } else {
     $query = "SELECT * FROM form_answers";
-    $search_result = filterTable($query);
+    $allAlumniRes = filterTable($query);
+    $allAlumniRows = mysqli_fetch_all($allAlumniRes, MYSQLI_ASSOC);
+    $allYears = [];
+    echo "ASDAS";
+    foreach($allAlumniRows as $row) {
+        $temp = $row['alumni_YearGraduated'];
+        if(!in_array($temp, $allAlumniRows)){
+            array_push($allYears, $temp);
+        }
+    }
+    rsort($allYears);
 }
 
-if (isset($_POST['yearGraduated'])) {
-    $batchToSearch = $_POST['yearGraduated'];
+// if (isset($_POST['yearGraduated'])) {
+//     $batchToSearch = $_POST['yearGraduated'];
 
-    $query = "SELECT * FROM form_answers WHERE alumni_YearGraduated = '$batchToSearch'";
-    $batch_result = filterTable($query);
+//     $query = "SELECT * FROM form_answers WHERE alumni_YearGraduated = '$batchToSearch'";
+//     $batch_result = filterTable($query);
 
  
-} else {
-    $query = "SELECT * FROM form_answers";
-    $batch_result = filterTable($query);
-}
+// } else {
+//     $query = "SELECT * FROM form_answers";
+//     $batch_result = filterTable($query);
+// }
 
 ?>
 <!doctype html>
@@ -116,20 +126,19 @@ if (isset($_POST['yearGraduated'])) {
 
     <link rel="stylesheet" href="admin_viewAlumni.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dev_admin_viewAlumni.css"/> 
     <link rel="icon" href="./images/UBlogo.png">
 </head>
 
 <body class="  ">
 
     <div class="wrapper">
-
-        <div class="iq-sidebar  sidebar-default ">
+        <div class="iq-sidebar sidebar-default ">
             <div style="height: 100px;" class="iq-sidebar-logo d-flex align-items-center justify-content-between">
                 <!-- <a href="../backend/index.html" class="header-logo">
                     <img style="height: 60px; width:175px; position: relative;left: 35px;" src="./images/rgamingemporium-removebg-preview.png" class="img-fluid rounded-normal light-logo" alt="logo">
                     <h5 class="logo-title light-logo ml-3"></h5>
                 </a> -->
-
             </div>
             <div style="padding-top: 20px;" class="data-scrollbar" data-scroll="1">
                 <nav class="iq-sidebar-menu">
@@ -145,30 +154,6 @@ if (isset($_POST['yearGraduated'])) {
                                 <span style="color: #8e3041;" class="ml-4">Dashboard</span>
                             </a>
                         </li>
-                        <!-- <li class="">
-                            <a href="items_admin.php" class="">
-                                <svg class="svg-icon" id="p-dash2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="9" cy="21" r="1"></circle>
-                                    <circle cx="20" cy="21" r="1"></circle>
-                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                </svg>
-                                <span class="ml-4">Items</span>
-                            </a>
-                        </li> -->
-
-                        <!-- <li class="active">
-                            <a href="admin_alumni.php" class="">
-                                <svg class="svg-icon" id="p-dash3" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8e3041" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="9" cy="7" r="4"></circle>
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                </svg>
-                                <span style="color: #8e3041;" class="ml-4">Alumni</span>
-
-                            </a>
-
-                        </li> -->
 
                         <li class="">
                             <a href="#return" class="collapsed" data-toggle="collapse" aria-expanded="false">
@@ -316,535 +301,240 @@ if (isset($_POST['yearGraduated'])) {
                 </ul>
             </div>
             <div class="menu-btn"></div>
-
         </header>
-
-
-
-
-        <div class="content-page">
-            <div class="container-fluid">
-                <div class="row">
-                    <div id="grid">
-                        <form action="admin_viewAlumni.php" method="POST">
-                            <div style="height:40px;width:540px; padding-left:53px; position: relative; top: 15px;" class="txt_field">
-                                <input style="padding-left:15px" type="text" name="valueToSearch" placeholder="Search Alumni"><br><br>
-                            </div>
-
-                            <div style="position:relative;left:560px;bottom: 85px;width:150px; height:40px" class="row2">
-                                <div class="button">
-                                    <input type="submit" value="Search" name="search">
-                                </div>
-
-                                <label style="margin-right: 15px; letter-spacing: 3px; width: 250px;position:relative;left:330px;bottom:13px" for="password">BATCH : </label>
-                                <!-- <input type="password" id="password" name="password" required> -->
-                                <!-- Select your state: -->
-                                <div class="surveyOptions">
-                                    <select style="width: 90px;height:40px; position:relative;left:425px;bottom:54px" name="yearGraduated" id="options">
-                                        <OPTION VALUE=>
-                                        <OPTION VALUE=2015>2015
-                                        <OPTION VALUE=2016>2016
-                                        <OPTION VALUE=2017>2017
-                                        <OPTION VALUE=2018>2018
-                                        <OPTION VALUE=2019>2019
-                                        <OPTION VALUE=2020>2020
-                                        <OPTION VALUE=2021>2021
-                                        <OPTION VALUE=2022>2022
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
-
-                 
-                        <?php
-                        // $alumni2 = mysqli_query($con, "SELECT * FROM form_answers");
-                        // if (mysqli_num_rows($alumni2) > 0) {
-                            while ($row3 = mysqli_fetch_assoc($search_result)) {
-                                
-                                // $alumni_data = mysqli_query($con, "SELECT * FROM form_answers WHERE alumni_YearGraduated = '2015'");
-                                // if (mysqli_num_rows($alumni_data) > 0) {
-                                //     while ($row = mysqli_fetch_assoc($alumni_data)) {
-                        ?>
-                                <div id="batch2015"  class="product">
-                         
-                                    <div class="make3D">
-                                        <?php echo "<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'>" ?>
-                                        <div class="product-front">
-                                            <!-- <a href="./alumni/alumni1.php"> -->
-                                            <!-- <form action="admin_alumniProfile.php" method="post"> -->
-                                            <!-- <div class="shadow"></div> -->
-                                            <!-- <img style="margin-top: 100px;" name="image" src=./images/nani.jpg alt="" /> -->
-
-                                            <div class="img__container">
-                                                <!-- <img src="./images/alumni/anon2.png" alt="Profile Picture" /> -->
-                                                <img src="./images/<?php echo $row3['alumni_Picture']; ?>" onerror="this.src='anon2.png'">
-                                            </div>
-
-                                            <div class="stats">
-                                                <div class="stats-container">
-
-                                                    <!-- <span name="price" class="product_price"></span> -->
-
-                                                    <span class="product_name"><?php echo $row3['alumni_LastName']; ?>, <?php echo $row3['alumni_FirstName']; ?></span>
-                                                    <h5 style="font-size: 15px;"><?php echo $row3['alumni_StudentNumber']; ?></h5>
-
-                                                    <!-- <div class="row">
-
-                                                            <a href="maintenance.php" class="info-btn">View Details</a>
-                                                            <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="Add to cart" name="add_to_cart">
-
-
-                                                        </div> -->
-                                                </div>
-                                            </div>
-                                            <!-- <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="View Alumni" name="ViewAlumni"> -->
-                                            <!-- </form> -->
-                                            <!-- </a> -->
-                                        </div>
-                                        <?php "</a>"
-                                        ?>
-                                    </div>
-                                </div>
-
-                        <?php
-                                // echo"<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'> View Alumni</a>";
-                                // $_SESSION['currentlyViewingAlumni'] = $row3['alumni_StudentNumber'];
-                                // print_r($_SESSION['currentlyViewingAlumni']);
-                                // break;
-                                // continue;
-                            };
-                        // }
-
-                        // unset($_SESSION['currentlyViewingAlumni']);
-                        // header("Location: backtoview.php");
-
-                        ?>
-
-                        <?php
-                        // $alumni2 = mysqli_query($con, "SELECT * FROM form_answers");
-                        // if (mysqli_num_rows($alumni2) > 0) {
-                            while ($row3 = mysqli_fetch_assoc($search_result)) {
-                        ?>
-                                <div id="batch2016" style="display:none" class="product">
-                         
-                                    <div class="make3D">
-                                        <?php echo "<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'>" ?>
-                                        <div class="product-front">
-                                            <!-- <a href="./alumni/alumni1.php"> -->
-                                            <!-- <form action="admin_alumniProfile.php" method="post"> -->
-                                            <!-- <div class="shadow"></div> -->
-                                            <!-- <img style="margin-top: 100px;" name="image" src=./images/nani.jpg alt="" /> -->
-
-                                            <div class="img__container">
-                                                <!-- <img src="./images/alumni/anon2.png" alt="Profile Picture" /> -->
-                                                <img src="./images/<?php echo $row3['alumni_Picture']; ?>">
-                                            </div>
-
-                                            <div class="stats">
-                                                <div class="stats-container">
-
-                                                    <!-- <span name="price" class="product_price"></span> -->
-
-                                                    <span class="product_name"><?php echo $row3['alumni_LastName']; ?>, <?php echo $row3['alumni_FirstName']; ?></span>
-                                                    <h5 style="font-size: 15px;"><?php echo $row3['alumni_StudentNumber']; ?></h5>
-
-                                                    <!-- <div class="row">
-
-                                                            <a href="maintenance.php" class="info-btn">View Details</a>
-                                                            <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="Add to cart" name="add_to_cart">
-
-
-                                                        </div> -->
-                                                </div>
-                                            </div>
-                                            <!-- <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="View Alumni" name="ViewAlumni"> -->
-                                            <!-- </form> -->
-                                            <!-- </a> -->
-                                        </div>
-                                        <?php "</a>"
-                                        ?>
-                                    </div>
-                                </div>
-
-                        <?php
-                                // echo"<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'> View Alumni</a>";
-                                // $_SESSION['currentlyViewingAlumni'] = $row3['alumni_StudentNumber'];
-                                // print_r($_SESSION['currentlyViewingAlumni']);
-                                // break;
-                                // continue;
-                            };
-                        // }
-
-                        // unset($_SESSION['currentlyViewingAlumni']);
-                        // header("Location: backtoview.php");
-
-                        ?>
-                        <?php
-                        // $alumni2 = mysqli_query($con, "SELECT * FROM form_answers");
-                        // if (mysqli_num_rows($alumni2) > 0) {
-                            while ($row3 = mysqli_fetch_assoc($search_result)) {
-                        ?>
-                                <div id="batch2017" style="display:none" class="product">
-                                    <div class="make3D">
-                                        <?php echo "<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'>" ?>
-                                        <div class="product-front">
-                                            <!-- <a href="./alumni/alumni1.php"> -->
-                                            <!-- <form action="admin_alumniProfile.php" method="post"> -->
-                                            <!-- <div class="shadow"></div> -->
-                                            <!-- <img style="margin-top: 100px;" name="image" src=./images/nani.jpg alt="" /> -->
-
-                                            <div class="img__container">
-                                                <!-- <img src="./images/alumni/anon2.png" alt="Profile Picture" /> -->
-                                                <img src="./images/<?php echo $row3['alumni_Picture']; ?>">
-                                            </div>
-
-                                            <div class="stats">
-                                                <div class="stats-container">
-
-                                                    <!-- <span name="price" class="product_price"></span> -->
-
-                                                    <span class="product_name"><?php echo $row3['alumni_LastName']; ?>, <?php echo $row3['alumni_FirstName']; ?></span>
-                                                    <h5 style="font-size: 15px;"><?php echo $row3['alumni_StudentNumber']; ?></h5>
-
-                                                    <!-- <div class="row">
-
-                                                            <a href="maintenance.php" class="info-btn">View Details</a>
-                                                            <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="Add to cart" name="add_to_cart">
-
-
-                                                        </div> -->
-                                                </div>
-                                            </div>
-                                            <!-- <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="View Alumni" name="ViewAlumni"> -->
-                                            <!-- </form> -->
-                                            <!-- </a> -->
-                                        </div>
-                                        <?php "</a>"
-                                        ?>
-                                    </div>
-                                </div>
-
-                        <?php
-                                // echo"<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'> View Alumni</a>";
-                                // $_SESSION['currentlyViewingAlumni'] = $row3['alumni_StudentNumber'];
-                                // print_r($_SESSION['currentlyViewingAlumni']);
-                                // break;
-                                // continue;
-                            };
-                        // }
-
-                        // unset($_SESSION['currentlyViewingAlumni']);
-                        // header("Location: backtoview.php");
-
-                        ?>
-
-                        <?php
-                        // $alumni2 = mysqli_query($con, "SELECT * FROM form_answers");
-                        // if (mysqli_num_rows($alumni2) > 0) {
-                            while ($row3 = mysqli_fetch_assoc($search_result)) {
-                        ?>
-                                <div id="batch2018" style="display:none" class="product">
-                                    <div class="make3D">
-                                        <?php echo "<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'>" ?>
-                                        <div class="product-front">
-                                            <!-- <a href="./alumni/alumni1.php"> -->
-                                            <!-- <form action="admin_alumniProfile.php" method="post"> -->
-                                            <!-- <div class="shadow"></div> -->
-                                            <!-- <img style="margin-top: 100px;" name="image" src=./images/nani.jpg alt="" /> -->
-
-                                            <div class="img__container">
-                                                <!-- <img src="./images/alumni/anon2.png" alt="Profile Picture" /> -->
-                                                <img src="./images/<?php echo $row3['alumni_Picture']; ?>">
-                                            </div>
-
-                                            <div class="stats">
-                                                <div class="stats-container">
-
-                                                    <!-- <span name="price" class="product_price"></span> -->
-
-                                                    <span class="product_name"><?php echo $row3['alumni_LastName']; ?>, <?php echo $row3['alumni_FirstName']; ?></span>
-                                                    <h5 style="font-size: 15px;"><?php echo $row3['alumni_StudentNumber']; ?></h5>
-
-                                                    <!-- <div class="row">
-
-                                                            <a href="maintenance.php" class="info-btn">View Details</a>
-                                                            <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="Add to cart" name="add_to_cart">
-
-
-                                                        </div> -->
-                                                </div>
-                                            </div>
-                                            <!-- <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="View Alumni" name="ViewAlumni"> -->
-                                            <!-- </form> -->
-                                            <!-- </a> -->
-                                        </div>
-                                        <?php "</a>"
-                                        ?>
-                                    </div>
-                                </div>
-
-                        <?php
-                                // echo"<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'> View Alumni</a>";
-                                // $_SESSION['currentlyViewingAlumni'] = $row3['alumni_StudentNumber'];
-                                // print_r($_SESSION['currentlyViewingAlumni']);
-                                // break;
-                                // continue;
-                            };
-                        // }
-
-                        // unset($_SESSION['currentlyViewingAlumni']);
-                        // header("Location: backtoview.php");
-
-                        ?>
-
-                        <?php
-                        // $alumni2 = mysqli_query($con, "SELECT * FROM form_answers");
-                        // if (mysqli_num_rows($alumni2) > 0) {
-                            while ($row3 = mysqli_fetch_assoc($search_result)) {
-                        ?>
-                                <div id="batch2019" style="display:none" class="product">
-                                    <div class="make3D">
-                                        <?php echo "<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'>" ?>
-                                        <div class="product-front">
-                                            <!-- <a href="./alumni/alumni1.php"> -->
-                                            <!-- <form action="admin_alumniProfile.php" method="post"> -->
-                                            <!-- <div class="shadow"></div> -->
-                                            <!-- <img style="margin-top: 100px;" name="image" src=./images/nani.jpg alt="" /> -->
-
-                                            <div class="img__container">
-                                                <!-- <img src="./images/alumni/anon2.png" alt="Profile Picture" /> -->
-                                                <img src="./images/<?php echo $row3['alumni_Picture']; ?>">
-                                            </div>
-
-                                            <div class="stats">
-                                                <div class="stats-container">
-
-                                                    <!-- <span name="price" class="product_price"></span> -->
-
-                                                    <span class="product_name"><?php echo $row3['alumni_LastName']; ?>, <?php echo $row3['alumni_FirstName']; ?></span>
-                                                    <h5 style="font-size: 15px;"><?php echo $row3['alumni_StudentNumber']; ?></h5>
-
-                                                    <!-- <div class="row">
-
-                                                            <a href="maintenance.php" class="info-btn">View Details</a>
-                                                            <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="Add to cart" name="add_to_cart">
-
-
-                                                        </div> -->
-                                                </div>
-                                            </div>
-                                            <!-- <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="View Alumni" name="ViewAlumni"> -->
-                                            <!-- </form> -->
-                                            <!-- </a> -->
-                                        </div>
-                                        <?php "</a>"
-                                        ?>
-                                    </div>
-                                </div>
-
-                        <?php
-                                // echo"<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'> View Alumni</a>";
-                                // $_SESSION['currentlyViewingAlumni'] = $row3['alumni_StudentNumber'];
-                                // print_r($_SESSION['currentlyViewingAlumni']);
-                                // break;
-                                // continue;
-                            };
-                        // }
-
-                        // unset($_SESSION['currentlyViewingAlumni']);
-                        // header("Location: backtoview.php");
-
-                        ?>
-
-                        <?php
-                        // $alumni2 = mysqli_query($con, "SELECT * FROM form_answers");
-                        // if (mysqli_num_rows($alumni2) > 0) {
-                            while ($row3 = mysqli_fetch_assoc($search_result)) {
-                        ?>
-                                <div id="batch2020" style="display:none" class="product">
-                                    <div class="make3D">
-                                        <?php echo "<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'>" ?>
-                                        <div class="product-front">
-                                            <!-- <a href="./alumni/alumni1.php"> -->
-                                            <!-- <form action="admin_alumniProfile.php" method="post"> -->
-                                            <!-- <div class="shadow"></div> -->
-                                            <!-- <img style="margin-top: 100px;" name="image" src=./images/nani.jpg alt="" /> -->
-
-                                            <div class="img__container">
-                                                <!-- <img src="./images/alumni/anon2.png" alt="Profile Picture" /> -->
-                                                <img src="./images/<?php echo $row3['alumni_Picture']; ?>">
-                                            </div>
-
-                                            <div class="stats">
-                                                <div class="stats-container">
-
-                                                    <!-- <span name="price" class="product_price"></span> -->
-
-                                                    <span class="product_name"><?php echo $row3['alumni_LastName']; ?>, <?php echo $row3['alumni_FirstName']; ?></span>
-                                                    <h5 style="font-size: 15px;"><?php echo $row3['alumni_StudentNumber']; ?></h5>
-
-                                                    <!-- <div class="row">
-
-                                                            <a href="maintenance.php" class="info-btn">View Details</a>
-                                                            <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="Add to cart" name="add_to_cart">
-
-
-                                                        </div> -->
-                                                </div>
-                                            </div>
-                                            <!-- <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="View Alumni" name="ViewAlumni"> -->
-                                            <!-- </form> -->
-                                            <!-- </a> -->
-                                        </div>
-                                        <?php "</a>"
-                                        ?>
-                                    </div>
-                                </div>
-
-                        <?php
-                                // echo"<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'> View Alumni</a>";
-                                // $_SESSION['currentlyViewingAlumni'] = $row3['alumni_StudentNumber'];
-                                // print_r($_SESSION['currentlyViewingAlumni']);
-                                // break;
-                                // continue;
-                            };
-                        // }
-
-                        // unset($_SESSION['currentlyViewingAlumni']);
-                        // header("Location: backtoview.php");
-
-                        ?>
-
-                        <?php
-                        // $alumni2 = mysqli_query($con, "SELECT * FROM form_answers");
-                        // if (mysqli_num_rows($alumni2) > 0) {
-                            while ($row3 = mysqli_fetch_assoc($search_result)) {
-                        ?>
-                                <div id="batch2021" style="display:none" class="product">
-                                    <div class="make3D">
-                                        <?php echo "<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'>" ?>
-                                        <div class="product-front">
-                                            <!-- <a href="./alumni/alumni1.php"> -->
-                                            <!-- <form action="admin_alumniProfile.php" method="post"> -->
-                                            <!-- <div class="shadow"></div> -->
-                                            <!-- <img style="margin-top: 100px;" name="image" src=./images/nani.jpg alt="" /> -->
-
-                                            <div class="img__container">
-                                                <!-- <img src="./images/alumni/anon2.png" alt="Profile Picture" /> -->
-                                                <img src="./images/<?php echo $row3['alumni_Picture']; ?>">
-                                            </div>
-
-                                            <div class="stats">
-                                                <div class="stats-container">
-
-                                                    <!-- <span name="price" class="product_price"></span> -->
-
-                                                    <span class="product_name"><?php echo $row3['alumni_LastName']; ?>, <?php echo $row3['alumni_FirstName']; ?></span>
-                                                    <h5 style="font-size: 15px;"><?php echo $row3['alumni_StudentNumber']; ?></h5>
-
-                                                    <!-- <div class="row">
-
-                                                            <a href="maintenance.php" class="info-btn">View Details</a>
-                                                            <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="Add to cart" name="add_to_cart">
-
-
-                                                        </div> -->
-                                                </div>
-                                            </div>
-                                            <!-- <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="View Alumni" name="ViewAlumni"> -->
-                                            <!-- </form> -->
-                                            <!-- </a> -->
-                                        </div>
-                                        <?php "</a>"
-                                        ?>
-                                    </div>
-                                </div>
-
-                        <?php
-                                // echo"<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'> View Alumni</a>";
-                                // $_SESSION['currentlyViewingAlumni'] = $row3['alumni_StudentNumber'];
-                                // print_r($_SESSION['currentlyViewingAlumni']);
-                                // break;
-                                // continue;
-                            };
-                        // }
-
-                        // unset($_SESSION['currentlyViewingAlumni']);
-                        // header("Location: backtoview.php");
-
-                        ?>
-
-                        <?php
-                        // $alumni2 = mysqli_query($con, "SELECT * FROM form_answers");
-                        // if (mysqli_num_rows($alumni2) > 0) {
-                            while ($row3 = mysqli_fetch_assoc($search_result)) {
-                        ?>
-                                <div id="batch2022" style="display:none" class="product">
-                                    <div class="make3D">
-                                        <?php echo "<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'>" ?>
-                                        <div class="product-front">
-                                            <!-- <a href="./alumni/alumni1.php"> -->
-                                            <!-- <form action="admin_alumniProfile.php" method="post"> -->
-                                            <!-- <div class="shadow"></div> -->
-                                            <!-- <img style="margin-top: 100px;" name="image" src=./images/nani.jpg alt="" /> -->
-
-                                            <div class="img__container">
-                                                <!-- <img src="./images/alumni/anon2.png" alt="Profile Picture" /> -->
-                                                <img src="./images/<?php echo $row3['alumni_Picture']; ?>">
-                                            </div>
-
-                                            <div class="stats">
-                                                <div class="stats-container">
-
-                                                    <!-- <span name="price" class="product_price"></span> -->
-
-                                                    <span class="product_name"><?php echo $row3['alumni_LastName']; ?>, <?php echo $row3['alumni_FirstName']; ?></span>
-                                                    <h5 style="font-size: 15px;"><?php echo $row3['alumni_StudentNumber']; ?></h5>
-
-                                                    <!-- <div class="row">
-
-                                                            <a href="maintenance.php" class="info-btn">View Details</a>
-                                                            <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="Add to cart" name="add_to_cart">
-
-
-                                                        </div> -->
-                                                </div>
-                                            </div>
-                                            <!-- <input type="submit" style="font-weight:700; border-style:none; width:142px; height:37px" class="info-btn" value="View Alumni" name="ViewAlumni"> -->
-                                            <!-- </form> -->
-                                            <!-- </a> -->
-                                        </div>
-                                        <?php "</a>"
-                                        ?>
-                                    </div>
-                                </div>
-
-                        <?php
-                                // echo"<a href='admin_alumniProfile.php?ID={$row3['alumni_StudentNumber']}'> View Alumni</a>";
-                                // $_SESSION['currentlyViewingAlumni'] = $row3['alumni_StudentNumber'];
-                                // print_r($_SESSION['currentlyViewingAlumni']);
-                                // break;
-                                // continue;
-                            };
-                    
-
-                        // unset($_SESSION['currentlyViewingAlumni']);
-                        // header("Location: backtoview.php");
-
-                        ?>
-
+        <div class="right-sidebar">
+            <div style="text-align: center; margin-top: 1rem;">
+                Filter By:
+            </div>
+            <div class="filter-group">
+                <div title>By Year</div>
+                <div class="d-flex">
+                    <?php foreach($allYears as $year): 
+                        $filterName = "filter" . $year;
+                    ?>
+                        <div>
+                            <input filter-col="alumni_YearGraduated" filter-val="<?= $year ?>" type="checkbox" id="<?= $filterName ?>" name="<?= $filterName ?>" >
+                            <label for="<?= $filterName ?>"><?= $year ?></label>
+                        </div>
+                    <?php endforeach ?>
+                </div>
+            </div>
+            <div class="filter-group">
+                <div title>By Gender</div>
+                <div class="d-flex">
+                    <div>
+                        <input filter-col="alumni_Gender" filter-val="Male" type="checkbox" id="filterMale" name="filterMale" >
+                        <label for="filterMale">Male</label>
+                    </div>
+                    <div>
+                        <input filter-col="alumni_Gender" filter-val="Female" type="checkbox" id="filterFemale" name="filterFemale">
+                        <label for="filterFemale">Female</label>
                     </div>
                 </div>
             </div>
+            <div class="filter-group">
+                <div title>By Employment</div>
+                <div class="d-flex">
+                    <div>
+                        <input filter-col="alumni_EmployementStatus" filter-val="Employed"  type="checkbox" id="filterEmployed" name="filterEmployed">
+                        <label for="filterEmployed">Employed</label>
+                    </div>
+                    <div>
+                        <input filter-col="alumni_EmployementStatus" filter-val="Unemployed" type="checkbox" id="filterUnemployed" name="filterUnemployed">
+                        <label for="filterUnemployed">Unemployed</label>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-group">
+                <div title>By Location</div>
+                <div class="d-flex">
+                    <div>
+                        <input filter-col="alumni_EmployedPlaceOfWork" filter-val="Local" type="checkbox" id="filterLocal">
+                        <label for="filterLocal">Local</label>
+                    </div>
+                    <div>
+                        <input filter-col="alumni_EmployedPlaceOfWork" filter-val="Abroad" type="checkbox" id="filterAbroad">
+                        <label for="filterAbroad">Abroad</label>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <button id="applyFilterBtn" class="btn" onclick="handleFilter(this)">Apply</button>
+                <button id="removeFilterBtn" class="btn" onclick="handleRemoveFilters()" disabled>Remove Filters</button>
+            </div>
+        </div>
+        <div style="gap:1.5rem" class="content content-v1 content-column">
+            <form style="align-self: center; min-width: 45%">
+                <div class="input-group">
+                    <input name="searchFilter" type="text" placeholder="Search"/>
+                    <div class="input-group-append" style="display:flex">
+                        <button id="searchFilterBtn" type="button" class="btn">Search</button>
+                    </div>
+                </div>
+            </form>
+            <p id="filterLoading" style="display:none; text-align:center; margin:1.5rem 0"">Loading...</p>
+            <div id="alumniList"  class="content-body">
+                <?php 
+                    foreach($allAlumniRows as $row):
+                ?>
+                    <div style="margin: 1rem 0;" class="product">
+                        <a class="make3D" href="<?= 'admin_alumniProfile.php?ID=' . $row['alumni_StudentNumber']?>">
+                            <div class="product-front">
+                                <div class="img__container">
+                                    <!-- <img src="./images/alumni/anon2.png" alt="Profile Picture" /> -->
+                                    <img src="./images/<?php echo $row['alumni_Picture']; ?>" onerror="this.src='anon2.png'">
+                                </div>
+                                <div class="stats">
+                                    <div class="stats-container">
+                                        <span class="product_name"><?= $row['alumni_LastName']; ?>, <?= $row['alumni_FirstName']; ?></span>
+                                        <h5 style="font-size: 15px;"><?= $row['alumni_StudentNumber']; ?></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                     </div>
+                <?php endforeach ?>
+            </div>
+
         </div>
     </div>
 
-    <script src="./js/backend-bundle.min.js"></script>
 
+<script src="./js/backend-bundle.min.js"></script>
+<script>
+    
+    let currentFetchData;
+    currentFetchData = 2;
 
-    <script src="./js/app.js"></script>
+</script>
+<script>
+    const FETCH_FILTER_URL_ENDPOINT = 'ajax/filterAlumni.php';
+    const rightSideBar = document.querySelector(".right-sidebar");
+    const filterLoading = document.querySelector("#filterLoading");
+    const alumniList = document.querySelector('#alumniList');
+    const removeFilterBtn = document.getElementById('removeFilterBtn');
+    const applyFilterBtn = document.getElementById('applyFilterBtn');
+    const searchFilterBtn = document.getElementById('searchFilterBtn');
+    const searchFilter = document.querySelector('input[name="searchFilter"]');
+    const filterInputs = Array.from(document.querySelectorAll('[filter-col]'));
+    const filterValues = {};
+    console.log(currentFetchData);
+    rightSideBar.addEventListener("change", (e)=>{
+        const isDisabled = filterInputs.some((element) => element?.checked);
+        removeFilterBtn.disabled = !isDisabled;
+    });
 
-    <script src="script.js"></script>
+    searchFilterBtn.addEventListener("click", (e)=>{
+        filterValues['searchFilter'] = searchFilter.value;
+        handleFilter();
+    });
+
+    
+    const gatherFilterValues = () => {
+        const tempFilterVals = {};
+        filterInputs.map(node => {
+            const filter_col = node.getAttribute('filter-col');
+            const node_value = node.hasAttribute('filter-val') ? node.getAttribute('filter-val') : node.value;
+            const {type} = node;
+            switch(type){
+                case 'checkbox':
+                    if(!(filter_col in tempFilterVals)){
+                        tempFilterVals[filter_col] = node?.checked ? new Set([node_value]) : new Set();
+                    }
+                    else{
+                        node?.checked ? (
+                            tempFilterVals[filter_col].add(node_value)
+                        ) : (
+                            tempFilterVals[filter_col].has(node_value) && tempFilterVals[filter_col].delete(node_value)
+                        );
+                    }
+                    break;
+                case 'select-one':
+                    tempFilterVals[filter_col] = node_value;
+                    break;
+            }
+        });
+        
+        for (const [key, value] of Object.entries(tempFilterVals)) {
+            if(value instanceof  Set){
+                filterValues[key] = [...value];
+            }
+            else{
+                filterValues[key] = value;
+            }
+        }
+    }
+    function handleFilter(){
+        //Perform an AJAX call
+        gatherFilterValues();
+        
+        const searchParams = new URLSearchParams(filterValues);
+        const xhr = new XMLHttpRequest();
+        filterLoading.style.display = 'block';
+        alumniList.replaceChildren();
+        xhr.open('POST', FETCH_FILTER_URL_ENDPOINT);
+        xhr.send(searchParams);
+        xhr.onload = (event) => {
+            if(xhr.status === 200){
+                const response_data = JSON.parse(xhr.response);
+                renderResult(response_data);
+            }else{
+                renderResult("Something went wrong", true);
+            }
+        }
+        xhr.onloadend = (event) => {
+            filterLoading.style.display = 'none';
+        }
+    }
+    const renderResult = (data, err = false) => {
+        if (err){
+            alumniList.innerHTML = `<h2 style="margin:1.5rem 0">${data}</h2>`;
+        }
+        if(data.length === 0 && !err){
+            alumniList.innerHTML = `<h2 style="margin:1.5rem 0">No matching entry found</h2>`;
+        }
+
+        data.map( row => {
+            const {
+                ID,
+                alumni_FirstName,
+                alumni_LastName,
+                alumni_Picture,
+                alumni_StudentNumber
+            } = row;
+            const htmlContent = `
+            <div style="margin: 1rem 0;" class="product">
+                <a class="make3D" href="admin_alumniProfile.php?ID=${alumni_StudentNumber}">
+                    <div class="product-front">
+                        <div class="img__container">
+                            <img src="./images/${alumni_Picture}" onerror="this.src='anon2.png'">
+                        </div>
+                        <div class="stats">
+                            <div class="stats-container">
+                                <span class="product_name">${alumni_LastName}, ${alumni_FirstName} </span>
+                                <h5 style="font-size: 15px;">${alumni_StudentNumber}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            `;
+            alumniList.innerHTML += htmlContent;
+        })
+    };
+    function handleRemoveFilters() {
+        filterInputs.map(node => {
+            if(node?.checked){
+                node.checked = false;
+            }
+        });
+        removeFilterBtn.disabled = true;
+    }
+
+</script>
+<script src="./js/app.js"></script>
+
+<script src="script.js"></script>
 </body>
 
 </html>

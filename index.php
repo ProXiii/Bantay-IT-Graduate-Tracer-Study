@@ -47,7 +47,7 @@
         <div class="content">
             <div class="info">
                 <h2>R Gaming<br><span>Emporium</span></h2>
-                <p>"It’s for everyone, not just gamers"</p>
+                <p>"It's for everyone, not just gamers"</p>
                 <a href="/unregisteredUser-Pages/products2.php" class="info-btn">Shop now!</a>
             </div>
             <img id="content_image"
