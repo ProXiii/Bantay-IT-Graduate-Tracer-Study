@@ -96,7 +96,7 @@ if (isset($_POST['search'])) {
     echo "ASDAS";
     foreach($allAlumniRows as $row) {
         $temp = $row['alumni_YearGraduated'];
-        if(!in_array($temp, $allAlumniRows)){
+        if(!in_array($temp, $allYears)){
             array_push($allYears, $temp);
         }
     }
